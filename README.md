@@ -5,8 +5,8 @@
 ## Quick Start
 ```bash
 # download repo
-git clone https://gitlab.com/saulmendoza/nginx-proxy
-cd nginx-proxy
+git clone https://gitlab.com/saulmendoza/nginx-ssl-docker
+cd nginx-ssl-docker
 
 # development mode
 make setup build dev

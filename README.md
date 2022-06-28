@@ -1,6 +1,6 @@
-# nginx-proxy
+# nginx-ssl-docker
 
-An automated nginx proxy for Docker containers.
+[nginx](https://www.nginx.com) as a **Reverse Proxy** with automatic config and automatic creation & renewal of SSL certificates ([LetsEncrypt](https://letsencrypt.org)) using Docker Containers ([Docker Compose](https://docs.docker.com/compose)).
 
 ## Quick Start
 ```bash

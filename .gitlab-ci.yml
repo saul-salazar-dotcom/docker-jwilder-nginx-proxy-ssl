@@ -1,0 +1,70 @@
+stages:
+  - deploy
+  - operations
+
+variables:
+  X_PROJECT_NAME: nginx
+  COMPOSE_PROJECT_NAME: "${CI_COMMIT_REF_SLUG}_${X_PROJECT_NAME}"
+
+default:
+  before_script:
+    - cp env/default.env .env
+    - cp env/${CI_COMMIT_REF_SLUG}.env .env || true # Ignore error like file doesn't exists
+
+.template_deploy: &deploy
+  stage: deploy
+  when: always
+  script:
+    - make setup build start
+  only:
+    - master
+
+.template_stop: &stop
+  stage: operations
+  when: manual
+  script:
+    - make stop
+  only:
+    - master
+
+.template_restart: &restart
+  stage: operations
+  when: manual
+  script:
+    - make restart
+  only:
+    - master
+
+.template_logs: &logs
+  stage: operations
+  when: manual
+  script:
+    - make logs
+  only:
+    - master
+
+prod_deploy:
+  <<: *deploy
+  tags:
+    - your_runner_tag
+  environment:
+    name: Production
+    on_stop: prod_stop
+
+prod_stop:
+  <<: *stop
+  tags:
+    - your_runner_tag
+  environment:
+    name: Production
+    action: stop
+
+prod_logs:
+  <<: *logs
+  tags:
+    - your_runner_tag
+
+prod_restart:
+  <<: *restart
+  tags:
+    - your_runner_tag

@@ -1,37 +1,50 @@
-# nginx-ssl-docker
+# 🔥 nginx-ssl-docker
 
-[nginx](https://www.nginx.com) as a **Reverse Proxy** with automatic config and automatic creation & renewal of SSL certificates ([LetsEncrypt](https://letsencrypt.org)) using Docker Containers ([Docker Compose](https://docs.docker.com/compose)).
+🖥️ [nginx](https://www.nginx.com) as a **Reverse Proxy** with 🧬 automatic config and automatic creation & renewal of 🔒 SSL certificates ([LetsEncrypt](https://letsencrypt.org)) using 🐋 Docker Containers ([Docker Compose](https://docs.docker.com/compose)).
 
-## Quick Start
+## 👍 Quick Start
 ```bash
-# download repo
+# ⬇️ download repo
 git clone https://gitlab.com/saulmendoza/nginx-ssl-docker
 cd nginx-ssl-docker
 
-# development mode
+# 🛠️ development mode
 make setup build dev
 
-# production mode
+# 🏭 production mode
 make setup build start
 
-# testing
+# ✅ Testing it works
 curl -H "Host: whoami.local" localhost
 # Example Output: I'm 5b129ab83266
 ```
 
-## Features (All Automated)
+## 👍 How to proxy services
+```yml
+# docker-compose.yml
+version: '2'
+services:
+  app:
+    image: jwilder/whoami
+    environment: # ⚠️ the next variables will tell nginx to proxy this service
+      LETSENCRYPT_EMAIL: your@email.com
+      LETSENCRYPT_HOST: exampledomain.com
+      VIRTUAL_HOST: exampledomain.com
+```
+
+## 💡 Features (All Automated)
 - Update and reload of nginx config
   - certificate creation/renewal
   - containers started/stopped
 - SSL certificates of Let's Encrypt (or other ACME CAs) using acme.sh.
 - Let's Encrypt / ACME domain validation through `http-01` challenge only.
 
-## Workflow
+## ⚙️ Workflow
 - The `docker-gen` service of this `docker-compose.yml` is notified of any new or stopped containers to update the nginx config.
 - If the new containers have the environment variable `VIRTUAL_HOST` they will be added to the proxy automatically.
 - If you want SSL certificates, add these environment variables to the containers: `LETSENCRYPT_HOST` and `LETSENCRYPT_EMAIL`.
 
-## Practices
+## 📚 Practices
 - 3 Separated docker containers (`nginx-proxy`, `docker-gen` and `acme-companion`)
 - 1 Separated docker volume for storing SSL certificates (`certs`)
 - 3 main environments split by **GitLab Runner Tags** (`dev`, `stage`, `master`)
@@ -39,20 +52,18 @@ curl -H "Host: whoami.local" localhost
 - One .conf file per `VIRTUAL_HOST` configutation
 - One file per HTTP Basic Authentication (per `VIRTUAL_HOST`)
 
-## Notes
+## 📝 Notes
 - LetsEncrypts requires a domain validation for every creation/renewal of certificates
   - Remember to make the DNS records to connect between the server and the domain.
   - Remember to open ports 80 and 443 on the server.
 
-## HTTP Basic Authentication
-
+## 🔑 HTTP Basic Authentication
 The password is not in plaintext, to generate it use the next command (remember to update `your-username` and `your-password`).
-
 ```bash
 docker run --rm httpd:2.4-alpine htpasswd -nbBC 10 "your-username" "your-password"
 ```
 
-## Configuration
+## 🧬 Configuration
 - Let's suppose your domain name is **bar.com**
 - [Path-based Routing](https://github.com/nginx-proxy/nginx-proxy#path-based-routing) `VIRTUAL_PATH=/api/v2/service`
 - [Multiple Hosts](https://github.com/nginx-proxy/nginx-proxy#multiple-hosts) `VIRTUAL_HOST=foo.bar.com,baz.bar.com,bar.com`
@@ -67,7 +78,7 @@ docker run --rm httpd:2.4-alpine htpasswd -nbBC 10 "your-username" "your-passwor
   - [Per VIRTUAL_HOST location default](https://github.com/nginx-proxy/nginx-proxy#per-virtual_host-location-default-configuration) `/vhost.d/default_location`
   - [Per VIRTUAL_PATH location](https://github.com/nginx-proxy/nginx-proxy#per-virtual_path-location-configuration)
 
-## Documentation
+## 📖 Documentation
 
 ### Name & History
 Formerly known as [jwilder/nginx-proxy](https://github.com/jwilder/nginx-proxy), renamed to [nginx-proxy](https://github.com/nginx-proxy/nginx-proxy). It all started on 2014 with [this blogspot from Jason Wilder](http://jasonwilder.com/blog/2014/03/25/automated-nginx-reverse-proxy-for-docker/).
@@ -82,15 +93,15 @@ Current Official Repositories:
 curl https://raw.githubusercontent.com/nginx-proxy/nginx-proxy/main/nginx.tmpl > nginx.tmpl
 ```
 
-### Troubleshooting
+## 👀 Troubleshooting
 ```bash
 docker-compose exec proxy cat /etc/nginx/conf.d/default.conf
 ```
 
-## Credits
+## 💯 Credits
 - [Jason Wilder](https://github.com/jwilder)
 
-## Dependencies
+## 🧰 Dependencies
 - [Nginx](https://www.nginx.com)
 - [LetsEncrypt SSL](http://letsencrypt.org/)
 - [Docker](https://docker.com)

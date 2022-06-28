@@ -88,14 +88,16 @@ Current Official Repositories:
 - [docker-gen](https://github.com/nginx-proxy/docker-gen)
 - [acme-companion](https://github.com/nginx-proxy/acme-companion)
 
+## 👀 Troubleshooting
+
+### Reading live config
+```bash
+docker-compose exec proxy cat /etc/nginx/conf.d/default.conf
+```
+
 ### Updating nginx.tmpl
 ```bash
 curl https://raw.githubusercontent.com/nginx-proxy/nginx-proxy/main/nginx.tmpl > nginx.tmpl
-```
-
-## 👀 Troubleshooting
-```bash
-docker-compose exec proxy cat /etc/nginx/conf.d/default.conf
 ```
 
 ## 💯 Credits

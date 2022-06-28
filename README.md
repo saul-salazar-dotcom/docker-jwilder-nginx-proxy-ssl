@@ -44,6 +44,14 @@ curl -H "Host: whoami.local" localhost
   - Remember to make the DNS records to connect between the server and the domain.
   - Remember to open ports 80 and 443 on the server.
 
+## HTTP Basic Authentication
+
+The password is not in plaintext, to generate it use the next command (remember to update `your-username` and `your-password`).
+
+```bash
+docker run --rm httpd:2.4-alpine htpasswd -nbBC 10 "your-username" "your-password"
+```
+
 ## Configuration
 - Let's suppose your domain name is **bar.com**
 - [Path-based Routing](https://github.com/nginx-proxy/nginx-proxy#path-based-routing) `VIRTUAL_PATH=/api/v2/service`
